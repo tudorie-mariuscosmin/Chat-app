@@ -67,6 +67,7 @@ module.exports = {
                             res.json({
                                 firstName: user.firstName,
                                 lastName: user.lastName,
+                                admin: user.admin,
                                 token: token
                             })
                         }
