@@ -37,6 +37,7 @@
 
 <script>
 export default {
+  name: "Login",
   data() {
     return {
       email: "",
@@ -52,7 +53,7 @@ export default {
             password: this.password,
           })
           .then((res) => {
-            console.log(res.data);
+            this.$store.dispatch("chatStore/login", res.data);
           })
           .catch((err) =>
             this.$q.notify({
