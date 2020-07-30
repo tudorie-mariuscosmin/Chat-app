@@ -28,6 +28,7 @@
           <span
             class="text-primary text-bold cursor-pointer"
             style="text-decoration:underline"
+            @click="$router.push('/register')"
           >Create one here</span>
         </div>
       </div>

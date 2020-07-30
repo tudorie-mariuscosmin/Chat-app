@@ -88,21 +88,23 @@ module.exports = {
             const AuthorizationHeader = req.headers['authorization']
             const token = AuthorizationHeader && AuthorizationHeader.split(' ')[1]
 
-            if (token == null) res.sendStatus(401)
-            jwt.verify(token, process.env.JWT_SECRET, (err, data) => {
-                if (err) res.sendStatus(403);
-                if (data) {
-                    User.findOne({ _id: data.id }, (err, user) => {
-                        if (err) req.sendStatus(500);
-                        if (user) {
-                            req.user = user
-                            next()
-                        }
+            if (!token) res.sendStatus(401);
+            else {
+                jwt.verify(token, process.env.JWT_SECRET, (err, data) => {
+                    if (err) res.sendStatus(403);
+                    if (data) {
+                        User.findOne({ _id: data.id }, (err, user) => {
+                            if (err) req.sendStatus(500);
+                            if (user) {
+                                req.user = user
+                                next()
+                            }
 
-                    })
+                        })
 
-                }
-            })
+                    }
+                })
+            }
         }
     }
 }
