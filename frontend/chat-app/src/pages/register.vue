@@ -36,7 +36,7 @@
         v-model="password"
         filled
         :type="isPwd ? 'password' : 'text'"
-        hint="Password with toggle"
+        label="Password"
         style="max-width: 400px; width:80vw"
         class="q-mx-md"
         ref="password"

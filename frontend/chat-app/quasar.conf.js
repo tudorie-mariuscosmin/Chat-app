@@ -83,7 +83,7 @@ module.exports = function (/* ctx */) {
       public: '0.0.0.0',
       proxy: {
         // proxy all requests starting with /api to jsonplaceholder
-        '/api': {
+        '/': {
           target: 'http://0.0.0.0:8080',
           secure: false,
           changeOrigin: true,

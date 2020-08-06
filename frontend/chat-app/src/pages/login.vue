@@ -3,7 +3,11 @@
     <div class="row justify-center no-wrap container shadow-10">
       <img src="../assets/img/Linth-crop.png" class="pattern desktop-only q-ma-sm" />
       <div>
-        <h4 class="text-center">Chat App</h4>
+        <div class="row justify-center items-center">
+          <img src="../assets/img/logo.png" alt="logo" style="max-height:60px" />
+          <h4 class="text-center">Chat App</h4>
+        </div>
+
         <q-input
           filled
           v-model="email"
@@ -55,6 +59,9 @@ export default {
           })
           .then((res) => {
             this.$store.dispatch("chatStore/login", res.data);
+            if (res.data.token) {
+              this.$router.push("/user/home");
+            }
           })
           .catch((err) =>
             this.$q.notify({

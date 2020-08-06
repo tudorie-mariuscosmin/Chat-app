@@ -1,8 +1,7 @@
-export default function () {
-  return {
-    firstName: '',
-    lastName: '',
-    admin: null,
-    token: ''
-  }
+export default {
+  firstName: '',
+  lastName: '',
+  admin: null,
+  token: ''
+
 }
