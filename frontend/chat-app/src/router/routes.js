@@ -25,6 +25,10 @@ const routes = [
       }
     ]
   },
+  {
+    path: '/chat',
+    component: () => import('pages/chat.vue')
+  },
 
   // Always leave this as last one,
   // but you can also remove it
