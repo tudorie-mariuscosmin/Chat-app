@@ -121,7 +121,7 @@ export default {
         !this.$refs.birthdate.hasError
       ) {
         this.$axios
-          .post("/api/register", {
+          .post("/api/auth/register", {
             firstName: this.firstName,
             lastName: this.lastName,
             email: this.email,

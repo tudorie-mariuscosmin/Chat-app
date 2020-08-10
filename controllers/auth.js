@@ -83,7 +83,7 @@ module.exports = {
         res.send(req.user)
     },
 
-    middleware: {
+    authMiddleware: {
         authenticate: (req, res, next) => {
             const AuthorizationHeader = req.headers['authorization']
             const token = AuthorizationHeader && AuthorizationHeader.split(' ')[1]

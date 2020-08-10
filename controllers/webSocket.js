@@ -2,9 +2,15 @@
 module.exports = (socket) => {
 
     console.log('New WS connection')
-    socket.emit('message', 'merge?')
-    socket.broadcast.emit('message', "a new user connected")
+
+    socket.emit('info', 'welcome to Chat App')
+
+    socket.broadcast.emit('info', "a new user connected")
+
+
     socket.on('disconnect', () => {
-        io.emit('message', 'a user has left the chat')
+        socket.broadcast.emit('info', 'a user has left the chat')
     })
+    socket.on('message', msg => socket.broadcast.emit('message', msg))
+
 }

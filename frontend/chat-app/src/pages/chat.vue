@@ -1,24 +1,28 @@
 <template>
-  <div>
+  <div class="column content-center full-height">
+    <div class="row top-bar">
+      <q-btn flat icon="fas fa-arrow-left" />
+      <div class="q-mx-auto text-center q-my-auto text-h5">Titlu</div>
+      <q-btn flat round icon="fas fa-info" />
+    </div>
     <q-scroll-area
       :thumb-style="thumbStyle"
-      :content-style="contentStyle"
-      :content-active-style="contentActiveStyle"
-      style="height: 400px; max-width: 300px;"
+      style="height:85vh; width:100% ;max-width: 500px;"
       ref="scrollArea"
     >
       <div class="q-pa-md row justify-center">
-        <div v-for="mesag in messages" :key="mesag.index" style="width: 100%; max-width: 300px">
-          <q-chat-message v-if="mesag.send" :text="[mesag.msg]" sent />
-          <q-chat-message v-if="!mesag.send" :text="[mesag.msg]" />
+        <div v-for="message in messages" :key="message.index" style="width: 100%">
+          <q-chat-message v-if="message.send" :text="[message.text]" sent />
+          <q-chat-message v-if="!message.send" :text="[message.text]" bg-color="accent" />
         </div>
       </div>
     </q-scroll-area>
     <q-input
+      class="fixed-bottom q-mx-auto q-ma-xs"
+      style="max-width:500px"
       filled
       v-model="message"
-      placeholder="enter messege"
-      style=" max-width:300px"
+      placeholder="Type a message..."
       v-on:keyup.enter="send"
     >
       <template v-slot:after>
@@ -42,20 +46,11 @@ export default {
         // { msg: "bine, tu?", send: true },
         // { msg: "bine", send: false },
       ],
-      contentStyle: {
-        backgroundColor: "rgba(0,0,0,0.02)",
-        color: "#555",
-      },
-
-      contentActiveStyle: {
-        backgroundColor: "#eee",
-        color: "black",
-      },
 
       thumbStyle: {
         right: "2px",
         borderRadius: "5px",
-        backgroundColor: "#027be3",
+        backgroundColor: "#e51467",
         width: "5px",
         opacity: 0.75,
       },
@@ -64,15 +59,21 @@ export default {
   created() {
     this.socket = io();
     this.socket.on("message", (message) => {
-      this.messages.push({ msg: message, send: false });
+      this.messages.push({ text: message, send: false });
       this.message = "";
     });
+    this.socket.on("info", (info) =>
+      this.$q.notify({
+        message: info,
+        color: "primary",
+      })
+    );
   },
   methods: {
     send() {
       if (this.message) {
-        this.socket.emit("chatMsg", this.message);
-        this.messages.push({ msg: this.message, send: true });
+        this.socket.emit("message", this.message);
+        this.messages.push({ text: this.message, send: true });
         this.message = "";
         this.$refs.scrollArea.setScrollPosition(
           this.messages.length * 100,
@@ -84,5 +85,5 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 </style>

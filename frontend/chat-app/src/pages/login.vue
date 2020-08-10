@@ -53,7 +53,7 @@ export default {
     signIn() {
       if (!this.$refs.email.hasError && !this.$refs.password.hasError) {
         this.$axios
-          .post("/api/login", {
+          .post("/api/auth/login", {
             email: this.email,
             password: this.password,
           })

@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser')
-const routes = require('./routes/auth')
+const routes = require('./routes')
 const http = require('http')
 const socketio = require('socket.io')
 const wsController = require('./controllers/webSocket')
@@ -12,16 +12,18 @@ const io = socketio(server)
 app.use(bodyParser.json())
 app.use('/api', routes)
 
-io.on('connection', socket => {
+// io.on('connection', socket => {
 
-    // console.log('New WS connection')
-    // socket.emit('message', 'Welcome!')
-    // socket.broadcast.emit('message', "a new user connected")
-    // socket.on('disconnect', () => {
-    //     socket.broadcast.emit('message', 'a user has left the chat')
-    // })
-    socket.on('chatMsg', msg => socket.broadcast.emit('message', msg))
-})
+//     console.log('New WS connection')
+//     socket.emit('message', 'Welcome!')
+//     socket.broadcast.emit('message', "a new user connected")
+//     socket.on('disconnect', () => {
+//         socket.broadcast.emit('message', 'a user has left the chat')
+//     })
+//     socket.on('chatMsg', msg => socket.broadcast.emit('message', msg))
+// })
+
+io.on('connection', wsController);
 
 const PORT = process.env.PORT || 3000;
 
