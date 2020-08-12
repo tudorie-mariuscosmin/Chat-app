@@ -40,5 +40,8 @@ module.exports = {
         Room.find({ users: req.user._id }).then(doc => {
             res.send(doc)
         })
+    },
+    getRoom: (req, res) => {
+        Room.findById(req.params.roomId).then(doc => res.send(doc))
     }
 }
