@@ -1,8 +1,8 @@
 <template>
   <div class="column content-center full-height">
     <div class="row top-bar">
-      <q-btn flat icon="fas fa-arrow-left" />
-      <div class="q-mx-auto text-center q-my-auto text-h5">Titlu</div>
+      <q-btn flat icon="fas fa-arrow-left" @click="$router.push('/user/home')" />
+      <div class="q-mx-auto text-center q-my-auto text-h5">{{title}}</div>
       <q-btn flat round icon="fas fa-info" />
     </div>
     <q-scroll-area
@@ -46,6 +46,7 @@ export default {
         // { msg: "bine, tu?", send: true },
         // { msg: "bine", send: false },
       ],
+      room: null,
 
       thumbStyle: {
         right: "2px",
@@ -56,8 +57,13 @@ export default {
       },
     };
   },
-  created() {
+  async created() {
+    const res = await this.$axios.get(
+      `/api/rooms/room/${this.$route.params.roomId}`
+    );
+    this.room = res.data;
     this.socket = io();
+    this.socket.emit("joinRoom", { room: this.room._id });
     this.socket.on("message", (message) => {
       this.messages.push({ text: message, send: false });
       this.message = "";
@@ -72,7 +78,7 @@ export default {
   methods: {
     send() {
       if (this.message) {
-        this.socket.emit("message", this.message);
+        this.socket.emit("message", { msg: this.message, room: this.room._id });
         this.messages.push({ text: this.message, send: true });
         this.message = "";
         this.$refs.scrollArea.setScrollPosition(
@@ -80,6 +86,15 @@ export default {
           300
         );
       }
+    },
+  },
+  computed: {
+    fullName() {
+      return this.$store.getters["chatStore/getFullName"];
+    },
+    title() {
+      if (this.room) return this.room.roomName;
+      else return "";
     },
   },
 };

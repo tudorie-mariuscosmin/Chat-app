@@ -6,7 +6,7 @@
     </div>
     <router-view></router-view>
     <div class="fixed-bottom q-mx-auto q-mb-sm" style=" max-width:500px">
-      <q-btn-group spread rounded>
+      <q-btn-group spread>
         <q-btn color="primary" rounded glossy icon="fas fa-user" />
         <q-btn color="primary" rounded glossy icon="fas fa-comment-dots" />
         <q-btn color="primary" rounded glossy icon="fas fa-sign-out-alt" />
@@ -16,8 +16,9 @@
 </template>
 
 <script>
-name: "UserLayout";
-export default {};
+export default {
+  name: "UserLayout",
+};
 </script>
 
 <style>
