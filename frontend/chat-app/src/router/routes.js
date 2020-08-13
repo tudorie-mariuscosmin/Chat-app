@@ -1,4 +1,13 @@
 import chatStore from '../store/chatStore'
+const chechAuth = {
+  user: (to, from, next) => {
+    if (chatStore.state.token) {
+      if (!chatStore.state.admin)
+        next();
+    } else
+      next(false)
+  }
+}
 const routes = [
   {
     path: '/',
@@ -11,24 +20,27 @@ const routes = [
   {
     path: '/user',
     component: () => import('layouts/user.vue'),
-    beforeEnter: (to, from, next) => {
-      if (chatStore.state.token) {
-        if (!chatStore.state.admin)
-          next();
-      } else
-        next(false)
-    },
+    beforeEnter: chechAuth.user,
     children: [
       {
         path: 'home',
         component: () => import('pages/home.vue')
+      },
+      {
+        path: 'npm',
+        component: () => import('pages/newPM.vue')
+      },
+      {
+        path: 'ngc',
+        component: () => import('pages/newGroupChat.vue')
       }
     ]
   },
   {
     path: '/chat/:roomId',
     name: 'chat',
-    component: () => import('pages/chat.vue')
+    component: () => import('pages/chat.vue'),
+    beforeEnter: chechAuth.user
   },
 
   // Always leave this as last one,
