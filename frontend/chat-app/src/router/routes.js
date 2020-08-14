@@ -33,6 +33,10 @@ const routes = [
       {
         path: 'ngc',
         component: () => import('pages/newGroupChat.vue')
+      },
+      {
+        path: 'profile',
+        component: () => import('pages/profile.vue')
       }
     ]
   },

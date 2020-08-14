@@ -57,17 +57,10 @@ export default {
       data: [],
       columns: [
         {
-          name: "First Name",
+          name: " Name",
           required: true,
-          label: "firstname",
-          field: "firstName",
-          align: "left",
-        },
-        {
-          name: "First Name",
-          required: true,
-          label: "firstname",
-          field: "lastName",
+          label: "name",
+          field: "name",
           align: "left",
         },
       ],

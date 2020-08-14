@@ -10,3 +10,10 @@ export function SetLoginData(state, data) {
     state.admin = data.admin
     state.token = data.token
 }
+
+export function ResetState(state) {
+    state.firstName = '';
+    state.lastName = '';
+    state.admin = '';
+    state.token = '';
+}

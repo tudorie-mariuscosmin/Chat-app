@@ -9,7 +9,7 @@ module.exports = {
         const data = users.map(user => {
             if (user.id !== req.user.id) {
                 const { firstName, lastName, _id } = user
-                return { firstName, lastName, 'id': _id }
+                return { name: `${firstName} ${lastName}`, 'id': _id }
             }
 
 

@@ -28,8 +28,8 @@
           clickable
           v-ripple
           v-for="room in rooms"
-          :key="room._id"
-          @click="$router.push({name:'chat', params:{roomId:room._id}})"
+          :key="room.id"
+          @click="$router.push({name:'chat', params:{roomId:room.id}})"
         >
           <q-item-section avatar>
             <q-avatar color="primary" text-color="white">{{room.roomName[0]}}</q-avatar>
