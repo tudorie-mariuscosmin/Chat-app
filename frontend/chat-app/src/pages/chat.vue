@@ -12,8 +12,19 @@
     >
       <div class="q-pa-md row justify-center">
         <div v-for="message in messages" :key="message.index" style="width: 100%">
-          <q-chat-message v-if="message.send" :text="[message.text]" sent />
-          <q-chat-message v-if="!message.send" :text="[message.text]" bg-color="accent" />
+          <q-chat-message
+            v-if="message.userName === fullName"
+            :text="[message.msg]"
+            sent
+            :stamp="message.time"
+          />
+          <q-chat-message
+            v-else
+            :text="[message.msg]"
+            bg-color="accent"
+            :name="message.userName"
+            :stamp="message.time"
+          />
         </div>
       </div>
     </q-scroll-area>
@@ -33,6 +44,7 @@
 </template>
 
 <script>
+import { date } from "quasar";
 import io from "socket.io-client";
 export default {
   data() {
@@ -40,11 +52,7 @@ export default {
       message: "",
       socket: null,
       messages: [
-        // { msg: "lalalala", send: true },
-        // { msg: "hello", send: false },
-        // { msg: "cf?", send: false },
-        // { msg: "bine, tu?", send: true },
-        // { msg: "bine", send: false },
+        // { msg: "lalalala", send: true }
       ],
       room: null,
 
@@ -62,11 +70,11 @@ export default {
       `/api/rooms/room/${this.$route.params.roomId}`
     );
     this.room = res.data;
+    this.messages = res.data.messages;
     this.socket = io();
     this.socket.emit("joinRoom", { room: this.room._id });
-    this.socket.on("message", (message) => {
-      this.messages.push({ text: message, send: false });
-      this.message = "";
+    this.socket.on("message", ({ msg, userName, time }) => {
+      this.messages.push({ msg, userName, time });
     });
     this.socket.on("info", (info) =>
       this.$q.notify({
@@ -78,8 +86,16 @@ export default {
   methods: {
     send() {
       if (this.message) {
-        this.socket.emit("message", { msg: this.message, room: this.room._id });
-        this.messages.push({ text: this.message, send: true });
+        let timestamp = Date.now();
+        let time = date.formatDate(timestamp, "ddd-H:mm");
+        const chatMessage = {
+          msg: this.message,
+          room: this.room._id,
+          userName: this.fullName,
+          time: time,
+        };
+        this.socket.emit("message", chatMessage);
+        this.messages.push(chatMessage);
         this.message = "";
         this.$refs.scrollArea.setScrollPosition(
           this.messages.length * 100,

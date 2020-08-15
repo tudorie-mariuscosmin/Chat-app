@@ -53,14 +53,14 @@ module.exports = {
     },
     getRoom: (req, res) => {
         Room.findById(req.params.roomId).then(room => {
-            let { id, roomName } = room
+            let { id, roomName, messages } = room
             if (!room.group) {
                 User.findById(room.users.filter(x => x != req.user.id)[0]).then(user => {
                     roomName = `${user.firstName} ${user.lastName}`
-                    res.send({ id, roomName })
+                    res.send({ id, roomName, messages })
                 })
             } else {
-                res.send({ id, roomName })
+                res.send({ id, roomName, messages })
             }
         })
     }

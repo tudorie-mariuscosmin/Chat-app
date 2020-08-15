@@ -4,7 +4,8 @@ const User = require('./user')
 const roomSchema = new mongoose.Schema({
     group: { type: Boolean },
     roomName: { type: String },
-    users: { type: [mongoose.ObjectId], required: true }
+    users: { type: [mongoose.ObjectId], required: true },
+    messages: { type: [] }
 })
 
 const Room = mongoose.model('rooms', roomSchema);
