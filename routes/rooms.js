@@ -6,5 +6,7 @@ router.post('/privateRoom/:id', authMiddleware.authenticate, roomsController.cre
 router.post('/groupRoom', authMiddleware.authenticate, roomsController.createGroupRoom)
 router.get('/rooms', authMiddleware.authenticate, roomsController.getUserRooms)
 router.get('/room/:roomId', authMiddleware.authenticate, roomsController.getRoom)
+router.delete('/messages/:roomId', authMiddleware.authenticate, roomsController.deleteMessages)
+router.delete('/:roomId', authMiddleware.authenticate, roomsController.deleteRoom)
 
 module.exports = router

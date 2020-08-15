@@ -63,5 +63,19 @@ module.exports = {
                 res.send({ id, roomName, messages })
             }
         })
+    },
+
+    deleteMessages: (req, res) => {
+        Room.findOneAndUpdate({ _id: req.params.roomId }, { messages: [] })
+            .then(() => res.sendStatus(200))
+            .catch(() => res.sendStatus(500))
+    },
+    deleteRoom: (req, res) => {
+        Room.deleteOne({ _id: req.params.roomId }, (err, room) => {
+            if (err)
+                res.sendStatus(500);
+            if (room)
+                res.sendStatus(200)
+        })
     }
 }
