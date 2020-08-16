@@ -3,7 +3,7 @@
     <div class="row top-bar">
       <q-btn flat icon="fas fa-arrow-left" @click="$router.push('/user/home')" />
       <div class="q-mx-auto text-center q-my-auto text-h5">{{title}}</div>
-      <q-btn flat round icon="fas fa-info" />
+      <q-btn flat round icon="fas fa-info" @click="infoDialog = true" />
     </div>
     <q-scroll-area
       :thumb-style="thumbStyle"
@@ -40,6 +40,71 @@
         <q-btn flat icon="fas fa-paper-plane" color="primary" @click="send" />
       </template>
     </q-input>
+
+    <q-dialog v-model="infoDialog">
+      <q-card>
+        <q-card-section class="row items-center q-pb-none">
+          <q-space />
+          <q-btn icon="close" flat round dense v-close-popup />
+        </q-card-section>
+
+        <q-card-section>
+          <q-btn-dropdown color="secondary" label="Settings" dropdown-icon="fas fa-cog">
+            <q-list>
+              <q-item clickable v-close-popup @click="delMsgDialog = true">
+                <q-item-section avatar>
+                  <q-icon color="red" name="far fa-trash-alt" />
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label class="text-red">Delete Messages</q-item-label>
+                </q-item-section>
+              </q-item>
+
+              <q-item clickable v-close-popup @click="delConvDialog = true">
+                <q-item-section avatar>
+                  <q-icon color="red" name="far fa-trash-alt" />
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label class="text-red">Delete Conversation</q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-btn-dropdown>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
+
+    <q-dialog v-model="delMsgDialog" persistent transition-show="scale" transition-hide="scale">
+      <q-card class="bg-red text-white" style="width: 300px">
+        <q-card-section>
+          <div class="text-h6">Delete Messages</div>
+        </q-card-section>
+
+        <q-card-section
+          class="q-pt-none"
+        >Are you sure you want to delete this conversation messages?</q-card-section>
+
+        <q-card-actions align="right" class="bg-white text-teal">
+          <q-btn flat label="Cancel" v-close-popup class="text-green" />
+          <q-btn flat label="Delete" v-close-popup class="text-red" @click="delMsg()" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+
+    <q-dialog v-model="delConvDialog" persistent transition-show="scale" transition-hide="scale">
+      <q-card class="bg-red text-white" style="width: 300px">
+        <q-card-section>
+          <div class="text-h6">Delete Conversation</div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">Are you sure you want to delete this conversation</q-card-section>
+
+        <q-card-actions align="right" class="bg-white">
+          <q-btn flat label="Cancel" v-close-popup class="text-green" />
+          <q-btn flat label="Delete" v-close-popup class="text-red" @click="delConv" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 
@@ -63,6 +128,9 @@ export default {
         width: "5px",
         opacity: 0.75,
       },
+      infoDialog: false,
+      delMsgDialog: false,
+      delConvDialog: false,
     };
   },
   async created() {
@@ -102,6 +170,49 @@ export default {
           300
         );
       }
+    },
+    delMsg() {
+      this.$axios
+        .delete(`/api/rooms/messages/${this.$route.params.roomId}`)
+        .then((res) => {
+          if (res.status == 200) {
+            this.$q.notify({
+              message: "Messages deleted",
+              color: "positive",
+            });
+            this.messages = [];
+          }
+        })
+        .catch((err) => {
+          if (err) {
+            this.$q.notify({
+              message: "Something went wrong",
+              color: "negative",
+            });
+          }
+        });
+    },
+
+    delConv() {
+      this.$axios
+        .delete(`/api/rooms/${this.$route.params.roomId}`)
+        .then((res) => {
+          if (res.status == 200) {
+            if (res.status == 200) {
+              this.$q.notify({
+                message: "Conversation Deleted",
+                color: "positive",
+              });
+              this.$router.push("/user/home");
+            }
+          }
+        })
+        .catch((err) => {
+          this.$q.notify({
+            message: "Something went wrong",
+            color: "negative",
+          });
+        });
     },
   },
   computed: {
