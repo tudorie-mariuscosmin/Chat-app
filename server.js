@@ -10,6 +10,11 @@ const app = express();
 const server = http.createServer(app)
 const io = socketio(server)
 app.use(bodyParser.json())
+app.get('/*', function (req, res, next) {
+    res.header('Cache-Control', 'no-cache, no-store');
+    next();
+});
+
 app.use('/api', routes)
 
 // io.on('connection', socket => {
@@ -24,6 +29,7 @@ app.use('/api', routes)
 // })
 
 io.on('connection', wsController);
+app.use(express.static('public'))
 
 const PORT = process.env.PORT || 3000;
 

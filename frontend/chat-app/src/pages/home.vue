@@ -24,6 +24,9 @@
         </q-btn>
       </q-toolbar>
       <q-list bordered separator class>
+        <q-inner-loading :showing="loading">
+          <q-spinner color="primary" size="3em" />
+        </q-inner-loading>
         <q-item
           clickable
           v-ripple
@@ -54,11 +57,14 @@ export default {
         width: "5px",
         opacity: 0.75,
       },
+      loading: false,
     };
   },
   async created() {
+    this.loading = true;
     const res = await this.$axios.get("/api/rooms/rooms");
     this.rooms = res.data;
+    this.loading = false;
   },
 };
 </script>

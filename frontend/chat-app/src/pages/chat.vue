@@ -1,5 +1,8 @@
 <template>
   <div class="column content-center full-height">
+    <q-inner-loading :showing="loading">
+      <q-spinner color="primary" size="3em" />
+    </q-inner-loading>
     <div class="row top-bar">
       <q-btn flat icon="fas fa-arrow-left" @click="$router.push('/user/home')" />
       <div class="q-mx-auto text-center q-my-auto text-h5">{{title}}</div>
@@ -44,6 +47,7 @@
     <q-dialog v-model="infoDialog">
       <q-card>
         <q-card-section class="row items-center q-pb-none">
+          <div class="text-h6">Info</div>
           <q-space />
           <q-btn icon="close" flat round dense v-close-popup />
         </q-card-section>
@@ -131,14 +135,17 @@ export default {
       infoDialog: false,
       delMsgDialog: false,
       delConvDialog: false,
+      loading: false,
     };
   },
   async created() {
+    this.loading = true;
     const res = await this.$axios.get(
       `/api/rooms/room/${this.$route.params.roomId}`
     );
     this.room = res.data;
     this.messages = res.data.messages;
+    this.loading = false;
     this.socket = io();
     this.socket.emit("joinRoom", { room: this.room._id });
     this.socket.on("message", ({ msg, userName, time }) => {
