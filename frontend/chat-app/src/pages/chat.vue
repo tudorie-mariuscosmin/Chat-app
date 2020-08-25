@@ -147,7 +147,7 @@ export default {
     this.messages = res.data.messages;
     this.loading = false;
     this.socket = io();
-    this.socket.emit("joinRoom", { room: this.room._id });
+    this.socket.emit("joinRoom", { room: this.room.id });
     this.socket.on("message", ({ msg, userName, time }) => {
       this.messages.push({ msg, userName, time });
     });
@@ -165,7 +165,7 @@ export default {
         let time = date.formatDate(timestamp, "ddd-H:mm");
         const chatMessage = {
           msg: this.message,
-          room: this.room._id,
+          room: this.room.id,
           userName: this.fullName,
           time: time,
         };
