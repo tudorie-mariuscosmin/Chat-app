@@ -1,4 +1,4 @@
-![Header](visualIdentity/Capture.jpg)
+![Header](https://github.com/tudorie-mariuscosmin/Chat-app/blob/master/visualIdentity/Capture.JPG)
 ## Visit and use the app at [chat.tudoriem.me](https://chat.tudoriem.me/#/)
 # Description
 Chat App is a small personal project created for the purpose of learning more about web applications and technologies. The app gives it's users the functionality of realtime chat both in private and group chats.
